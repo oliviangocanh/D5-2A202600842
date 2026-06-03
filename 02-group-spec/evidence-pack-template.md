@@ -4,7 +4,7 @@ Nộp kèm thin SPEC cuối Day 05.
 
 ## 1. Nhóm và track
 
-**Tên nhóm:** Nhóm 02 (AI Travel Planner)  
+**Tên nhóm:** Nhóm 007  
 **Track:** AI Travel Assistant / Booking Assistant  
 **Product/app đã chọn:** Trợ lý Du lịch Thông minh V-Travel AI  
 **Build slice đang nghĩ:** Trích xuất thông tin tìm kiếm từ câu lệnh tự nhiên để hiển thị danh sách vé máy bay và phòng khách sạn trực quan (Rich UI Cards) thay vì chỉ trả về text thô hoặc báo lỗi không tìm thấy.
@@ -15,23 +15,22 @@ Nhóm tự dùng app/workflow và ghi lại điểm gãy.
 
 | Observation | Screenshot/link | Path liên quan | Điều học được |
 |---|---|---|---|
-| User nhập câu lệnh: "Tìm vé máy bay khứ hồi từ Hà Nội đi Phú Quốc cuối tuần này và khách sạn 3 sao." AI trả lời chung chung khuyên user tự lên web hãng bay hoặc báo lỗi hệ thống không tìm thấy dữ liệu. | [z7896518379617_a2c7d5345cb40fa6a0b7328b65729187.jpg](file:///d:/VIN_UNI/day05/Batch02-Day05-AI-Product-Labs-main/Batch02-Day05-AI-Product-Labs-main/maybay/z7896518379617_a2c7d5345cb40fa6a0b7328b65729187.jpg) | Failure Path | AI thiếu khả năng tích hợp dữ liệu thời gian thực (API flights/hotels) và không có cơ chế fallback hiển thị kết quả thay thế khi không tìm được dữ liệu chính xác. |
-| User hỏi cụ thể: "Vinpearl Nha Trang còn phòng trống ngày mai không?" AI không nhận diện được ngày mai là ngày cụ thể nào, phản hồi "Không có dữ liệu phòng" và yêu cầu gọi hotline. | [z7896518380436_18b623765d4db15f0b9c0cc81dac7b86.jpg](file:///d:/VIN_UNI/day05/Batch02-Day05-AI-Product-Labs-main/Batch02-Day05-AI-Product-Labs-main/maybay/z7896518380436_18b623765d4db15f0b9c0cc81dac7b86.jpg) | Failure / Low-confidence Path | Hệ thống chưa có bộ phân tích thực thể (Entity Extractor) tốt để chuyển đổi các cụm từ thời gian tương đối ("ngày mai", "cuối tuần này") thành ngày tháng cụ thể để truy vấn cơ sở dữ liệu. |
+| User tìm khách sạn Hà Nội → HCM ngày 05/06–08/06, 1 phòng 1 khách. App hiển thị màn hình "Chọn khách sạn" nhưng trả về "Không có kết quả tìm kiếm phù hợp" kèm nút "Quay lại tìm kiếm" — không có gợi ý thay thế, không giải thích lý do, không có fallback. | [z7896518379617_a2c7d5345cb40fa6a0b7328b65729187.jpg](file:///d:/VIN_UNI/day05/Batch02-Day05-AI-Product-Labs-main/Batch02-Day05-AI-Product-Labs-main/maybay/z7896518379617_a2c7d5345cb40fa6a0b7328b65729187.jpg) | Failure Path | Khi không có kết quả, hệ thống chỉ báo lỗi mà không gợi ý thay thế (nới lỏng bộ lọc, thay đổi ngày, đề xuất khách sạn gần nhất). User bị dead-end hoàn toàn. |
+| Để tìm kiếm combo vé máy bay + khách sạn (Hà Nội → HCM, 05–08 tháng 6/2026), user phải nhập thủ công từng trường riêng lẻ: điểm đi, điểm đến, ngày nhận phòng, ngày trả phòng, số phòng, số người lớn, trẻ em, em bé, hạng vé. Không có AI hỗ trợ trích xuất thông tin từ câu tự nhiên. | [z7896518380436_18b623765d4db15f0b9c0cc81dac7b86.jpg](file:///d:/VIN_UNI/day05/Batch02-Day05-AI-Product-Labs-main/Batch02-Day05-AI-Product-Labs-main/maybay/z7896518380436_18b623765d4db15f0b9c0cc81dac7b86.jpg) | Low-confidence / Happy Path (manual) | Toàn bộ việc trích xuất intent (địa điểm, ngày, số người) đang đổ lên vai user. Nếu AI tự parse câu "Tìm combo vé + phòng Hà Nội đi HCM 5 đến 8 tháng 6, 1 người" và tự điền form, bước này sẽ biến mất. |
 
 ## 3. User / review / social evidence
 
-Nguồn có thể là review App Store/Play, group, comment, phỏng vấn nhanh, hoặc nguồn public khác.
+Nguồn: Đánh giá thực tế trên App Store — màn hình "Xếp hạng & nhận xét" (screenshot 15:49–15:51).
 
 | Quote / review / observation | Nguồn | User là ai? | Pain/failure mode |
 |---|---|---|---|
-| "Tôi muốn đặt combo vé máy bay và phòng trực tiếp qua trợ lý AI nhưng nó cứ báo lỗi tìm kiếm hoặc bắt tôi tự nhập tay từng bước trên website, rất mất thời gian và phiền phức." | Đánh giá trên App Store của ứng dụng du lịch | Khách du lịch tự túc bận rộn | Core workflow failure: Trợ lý AI không thực hiện được nghiệp vụ cốt lõi mà chỉ hoạt động như một chatbot hỏi đáp thông tin cơ bản. |
-| "Hỏi AI tìm phòng giá dưới 1 triệu ở Đà Nẵng thì nó list ra danh sách toàn chữ, không có hình ảnh phòng, không có giá cụ thể từng loại phòng để so sánh." | Group cộng đồng Du lịch bụi | Người trẻ thích đi phượt, so sánh giá | UX/Presentation Failure: Thiếu Rich UI (hình ảnh, giá cả so sánh trực quan) khiến user khó ra quyết định. |
-
-Nếu chưa có nguồn ngoài nhóm, ghi rõ:
-
-```text
-Đây là giả định. Nhóm sẽ kiểm bằng phỏng vấn nhanh 3 người dùng tiềm năng trước checkpoint M1 Day 06.
-```
+| "Tôi sd ipad nhưng đăng nhập rồi ko chọn đc gì khác ko vào đc chọn ks" — review "Ko dung dc" ★★★★★ | App Store · Vatc sleeppod · 11 tháng 10 | User dùng iPad, đăng nhập thành công nhưng không điều hướng được | Device compatibility failure: App không hoạt động đúng trên iPad — sau đăng nhập user bị kẹt, không vào được màn hình chọn khách sạn. |
+| "App lỗi liên tục" ★☆☆☆☆ | App Store · chs2026 · 10 tháng 10 | User phổ thông | Stability failure: App crash/lỗi liên tục, không dùng được. |
+| "Đặt phòng bằng điểm không thể hiện ngày nào có phòng và ngày nào ko có phòng, muốn đặt phải xem từng ngày một rất mất thời gian." — review "App chán" ★☆☆☆☆ | App Store · L.A.L · 1 năm trước | User đặt phòng bằng điểm thưởng | Availability UX failure: Không có calendar view hiển thị ngày có/hết phòng — user phải check thủ công từng ngày, cực kỳ tốn thời gian. |
+| "Không thêm được khách hàng đi cùng, nhấn lưu nhưng không có tác dụng" — review "thêm khách hàng" ★★★☆☆ | App Store · nvk43423 · 1 năm trước | User đặt phòng nhóm/gia đình | Core feature failure: Tính năng thêm khách đi cùng bị lỗi — nút lưu không hoạt động. |
+| "Không thể nào nhập được mật khẩu mình muốn lúc đăng kí. Thử đi thử lại không được. Trên ip13 nhé. Nên m xoá app r" — review "Lỗi đăng kí" ★☆☆☆☆ | App Store · phamhuyd · 1 năm trước | User iPhone 13 mới cài app | Onboarding failure: Không đăng ký được tài khoản — user bỏ app ngay từ bước đầu tiên. |
+| "Chủ biệt thự không thể đặt nổi phòng, mò mẫm dò dẫm toàn hết phòng, chỉ thấy phòng ở mấy nơi rừng rú ko ai đi, trong khi đặt bình thường lại báo có phòng" — review "Quá tệ" ★☆☆☆☆ | App Store · nsicnejxndkx · 5 năm trước | Chủ biệt thự / user có membership | Inventory inconsistency: Kết quả tìm kiếm hiển thị hết phòng nhưng kênh khác vẫn báo có — data không đồng bộ giữa các luồng đặt phòng. |
+| "Tôi muốn đặt 2 đêm nghỉ ở Phú Quốc nhưng không thể đặt được qua website vì thông tin không hiển thị. Nên cài app hi vọng có thể đặt được. Rút cuộc vẫn không thể." — review "App và website có vấn đề" ★☆☆☆☆ | App Store · UncleBay · 5 năm trước | Khách du lịch muốn đặt phòng Phú Quốc | Cross-channel failure: Cả website lẫn app đều không đặt được — thông tin phòng không hiển thị, user hoàn toàn bị chặn khỏi core workflow. |
 
 ## 4. Competitor / analog evidence
 
@@ -43,7 +42,7 @@ Nếu chưa có nguồn ngoài nhóm, ghi rõ:
 
 ```text
 Evidence nổi bật nhất:
-User tìm kiếm vé máy bay và phòng khách sạn qua AI nhưng không xem được kết quả trực quan mà bị báo lỗi tìm kiếm hoặc chỉ nhận được hướng dẫn tự tìm trên website.
+User tìm kiếm vé máy bay và phòng khách sạn thủ công nhưng không xem được kết quả trực quan mà bị báo lỗi tìm kiếm hoặc chỉ nhận được hướng dẫn tự tìm trên website.
 
 Insight:
 User không chỉ gặp khó khăn ở bước nhập liệu tìm kiếm (surface problem).
@@ -68,5 +67,5 @@ Ghi rõ 1-2 thay đổi quan trọng:
 ```text
 Trước evidence, nhóm định xây dựng chatbot tư vấn thông tin du lịch chung chung (dạng Q&A text).
 Sau evidence, nhóm đổi thành tập trung vào build slice: "Trích xuất thực thể tìm kiếm từ câu chat và hiển thị danh sách vé máy bay/phòng khách sạn dưới dạng Rich UI Cards để so sánh trực tiếp".
-Lý do: Điểm gãy lớn nhất của user là không xem và tìm kiếm được vé/phòng trực quan, khiến chatbot trở nên vô dụng đối với nhu cầu đặt dịch vụ.
+Lý do: Điểm gãy lớn nhất của user là không xem và tìm kiếm được vé/phòng trực quan, dẫn đến trải nghiệm kém không thu hút được khách hàng.
 ```

@@ -134,8 +134,8 @@ Owner kiểm thử path này là: ___________
 
 | Thành viên   | Việc phụ trách                 | Bằng chứng cần có trong repo              |
 | ------------ | ------------------------------ | ----------------------------------------- |
-| Thành viên 1 | Prompt + Policy Knowledge Base | Prompt, mock policy data, test cases      |
-| Thành viên 2 | Frontend Prototype             | Screenshot UI, interaction flow           |
-| Thành viên 3 | Testing + Failure Path         | Failure log, correction cases, edge cases |
+| Ngô Thị Ngọc Ánh | Prompt + Policy Knowledge Base | Prompt, mock policy data, test cases      |
+| Nguyễn Ngọc Anh | Frontend Prototype             | Screenshot UI, interaction flow           |
+| Nguyễn Mai Hồng Trâm | Testing + Failure Path         | Failure log, correction cases, edge cases |
 | Cả nhóm      | Demo script                    | Demo flow, happy path, failure path       |
 | Cả nhóm      | SPEC & Submission              | spec-final.md, prototype-readme.md        |
